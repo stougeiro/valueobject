@@ -2,8 +2,10 @@
 
     namespace STDW\ValueObject;
 
+    use Stringable;
 
-    interface ValueObjectInterface
+
+    interface ValueObjectInterface extends Stringable
     {
         public static function create(...$args): ValueObjectInterface;
 
