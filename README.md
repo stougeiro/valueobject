@@ -43,7 +43,6 @@ composer require stougeiro/valueobject
 
 ```php
 use STDW\ValueObject\ValueObjectAbstracted;
-use STDW\ValueObject\ValueObjectInterface;
 
 final class Email extends ValueObjectAbstracted
 {
