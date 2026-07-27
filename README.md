@@ -25,7 +25,6 @@ This package provides a minimalistic interface and an extensible abstract class 
 - **Minimalistic and extensible**  
   The interface stays small and expressive, while concrete classes define their own semantics.
 
----
 
 ## 📦 Installation
 
@@ -35,7 +34,6 @@ Install via Composer:
 composer require stougeiro/valueobject
 ```
 
----
 
 ## 🚀 Usage Example
 
@@ -65,7 +63,6 @@ final class Email extends ValueObjectAbstracted
 }
 ```
 
----
 
 ## 🚀 Instantiation
 
