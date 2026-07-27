@@ -3,7 +3,6 @@
 A lightweight and flexible foundation for creating **Value Objects** in PHP.  
 This package provides a minimalistic interface and an extensible abstract class that help developers build semantic value objects that encourage immutability, with optional validation and a clean factory pattern.
 
----
 
 ## ✨ Features
 
@@ -25,6 +24,7 @@ This package provides a minimalistic interface and an extensible abstract class 
 - **Minimalistic and extensible**  
   The interface stays small and expressive, while concrete classes define their own semantics.
 
+---
 
 ## 📦 Installation
 
