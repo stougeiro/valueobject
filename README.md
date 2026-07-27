@@ -14,7 +14,7 @@ This package provides a minimalistic interface and an extensible abstract class 
   Developers decide when and how to validate the underlying value.
 
 - **Semantic comparison**: `equals(ValueObjectInterface $other)`  
-  Compare two value objects of the same type.
+  Compare two value objects of the same type and value.
 
 - **Consistent value access**: `value()`  
   Returns the underlying primitive or structured value.
