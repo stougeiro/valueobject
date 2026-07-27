@@ -1,4 +1,4 @@
-# STDW ValueObject
+# ValueObject
 
 A lightweight and flexible foundation for creating **Value Objects** in PHP.  
 This package provides a minimalistic interface and an extensible abstract class that help developers build semantic value objects that encourage immutability, with optional validation and a clean factory pattern.
