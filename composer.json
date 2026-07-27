@@ -1,6 +1,9 @@
 {
     "name": "stougeiro/valueobject",
-    "type": "package",
+    "description": "A lightweight Value Object foundation for PHP",
+    "type": "library",
+    "minimum-stability": "stable",
+    "prefer-stable": true,
     "license": "MIT",
     "authors": [
         {
@@ -8,13 +11,22 @@
             "email": "sidneytougeiro@gmail.com"
         }
     ],
+    "keywords": [
+        "value-object",
+        "ddd",
+        "domain-driven-design",
+        "clean-arch"
+    ],
+    "support": {
+        "issues": "https://github.com/stougeiro/valueobject/issues",
+        "source": "https://github.com/stougeiro/valueobject"
+    },
     "autoload": {
         "psr-4": {
             "STDW\\ValueObject\\": "src/"
         }
     },
-    "minimum-stability": "dev",
     "require": {
-        "php": "^8.1"
+        "php": ">=8.1"
     }
 }
