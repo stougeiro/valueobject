@@ -1,3 +1,5 @@
+![phpstan-level](https://img.shields.io/badge/PHPStan-Level%209-brightgreen)
+
 # ValueObject
 
 A lightweight and flexible foundation for creating **Value Objects** in PHP.  
