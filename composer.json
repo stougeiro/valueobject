@@ -21,6 +21,12 @@
         "issues": "https://github.com/stougeiro/valueobject/issues",
         "source": "https://github.com/stougeiro/valueobject"
     },
+    "funding": [
+        {
+            "type": "buymeacoffee",
+            "url": "https://www.buymeacoffee.com/stougeiro"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "STDW\\ValueObject\\": "src/"
