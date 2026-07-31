@@ -84,6 +84,13 @@ Value Objects are a core building block in domain‑driven design and clean arch
 
 This package aims to provide a simple, expressive and unobtrusive foundation for building your own Value Objects without unnecessary boilerplate.
 
+---
+
+## 🤝 Contributions
+
+Contributions are welcome.
+Feel free to open issues or submit pull requests.
+
 <br><br>
 
 [<img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" width="170"/>](https://www.buymeacoffee.com/stougeiro)
