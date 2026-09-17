@@ -114,6 +114,6 @@ it('email is immutable', function () {
 it('rejects invalid emails', function (string $email) {
     Email::fromString($email);
 })->throws(\InvalidArgumentException::class)->with([
-    'invalid-email',
-    'user@name@example.com',
+    'invalid format' => 'invalid-email',
+    'multiple @' => 'user@name@example.com',
 ]);
