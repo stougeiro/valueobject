@@ -24,10 +24,6 @@ pest()->extend(Tests\TestCase::class)->in('Feature');
 |
 */
 
-expect()->extend('toBeOne', function () {
-    return $this->toBe(1);
-});
-
 /*
 |--------------------------------------------------------------------------
 | Functions
@@ -39,7 +35,7 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+function makeEmail(string $email = 'user@example.com'): \Tests\Fixtures\Email
 {
-    // ..
+    return \Tests\Fixtures\Email::fromString($email);
 }

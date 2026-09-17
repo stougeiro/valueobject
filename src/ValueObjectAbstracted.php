@@ -3,7 +3,7 @@
     namespace STDW\ValueObject;
 
 
-    readonly abstract class ValueObjectAbstracted implements ValueObjectInterface
+    abstract class ValueObjectAbstracted implements ValueObjectInterface
     {
         /** @return mixed 
          */
