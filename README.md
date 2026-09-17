@@ -11,7 +11,7 @@ This package provides a minimalistic interface and an extensible abstract class 
 
 ## ✨ Features
 
-- **Named constructors**: Each value object defines its own typed factory methods (e.g. `fromString()`, `fromParts()`), ensuring full type safety and IDE support.
+- **Named constructors**: Each value object defines its own typed factory methods (e.g. `fromString()`, `fromInt()`), ensuring full type safety and IDE support.
 
 - **Immutability**: Uses `readonly` properties (PHP 8.2+) to ensure value objects cannot be modified after creation.
 
@@ -148,10 +148,12 @@ $email->toString();           // "user@example.com"
 ### Comparison
 
 ```php
-$other = Email::fromString('user@example.com');
+$a = Email::fromString('user@example.com');
+$b = Email::fromString('USER@EXAMPLE.COM');
+$c = Email::fromString('other@example.com');
 
-$email->equals($other);       // true (same structure)
-$email->equals($other);       // true (normalization applied)
+$a->equals($b);       // true  — same values after normalization
+$a->equals($c);       // false — different values
 ```
 
 ### Serialization
@@ -196,7 +198,7 @@ $email->domain();             // "example.com"
 
 ---
 
-## 🧠 Why Value Objects?
+## 🧠 Why?
 
 Value Objects are a core building block in domain‑driven design and clean architecture. They encapsulate meaning, enforce structure, and prevent primitive obsession — ensuring that values carry behavior and validation instead of floating loosely through the system.
 
