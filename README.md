@@ -19,13 +19,13 @@ This package provides a minimalistic interface and an extensible abstract class 
   Developers decide when and how to validate the underlying value.
 
 - **Semantic comparison**: `equals(ValueObjectInterface $other)`  
-  Deep comparison using serialization, ensuring value equality.
+  Compares via `toArray()` representation, ensuring structural equality with type safety.
 
 - **Consistent value access**: `value()`  
   Returns the underlying primitive or structured value.
 
 - **Hash support**: `hashCode()`  
-  Deterministic hash for use as array keys or in collections.
+  Deterministic hash based on `toArray()` for use as array keys or in collections.
 
 - **Universal serialization**: `toArray()`  
   Returns array representation, works with JSON, XML, and other formats.
@@ -143,6 +143,30 @@ $emails = [$email->hashCode() => $email];
 Value Objects are a core building block in domain‑driven design and clean architecture. They encapsulate meaning, enforce structure, and prevent primitive obsession — ensuring that values carry behavior and validation instead of floating loosely through the system.
 
 This package aims to provide a simple, expressive and unobtrusive foundation for building your own Value Objects without unnecessary boilerplate.
+
+---
+
+## 🔍 How Comparisons Work
+
+Both `equals()` and `diff()` compare value objects using their `toArray()` representation.
+
+This approach ensures:
+- **Full structural equality**: Not just raw value, but the complete semantic representation
+- **Type safety**: `equals()` requires same class via `instanceof static`
+- **Consistent behavior**: Hash, JSON, XML, and comparisons all use the same array structure
+
+```php
+$email1 = Email::fromString('user@example.com');
+$email2 = Email::fromString('USER@EXAMPLE.COM');
+
+// Both normalize to the same toArray() representation
+$email1->toArray(); // ['email' => 'user@example.com', 'user' => 'user', 'domain' => 'example.com']
+$email2->toArray(); // ['email' => 'user@example.com', 'user' => 'user', 'domain' => 'example.com']
+
+$email1->equals($email2); // true
+```
+
+The `hashCode()` method also uses `toArray()`, ensuring consistency when value objects are used as array keys or in collections.
 
 ---
 
