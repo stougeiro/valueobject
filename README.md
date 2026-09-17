@@ -11,23 +11,33 @@ This package provides a minimalistic interface and an extensible abstract class 
 
 ## ✨ Features
 
-- **Generic factory**: `create(...$args)`  
-  Delegates construction to the concrete class while respecting its parameter types and order.
+- **Named constructors**: Each value object defines its own typed factory methods (e.g. `fromString()`, `fromParts()`), ensuring full type safety and IDE support.
+
+- **Immutability**: Uses `readonly` properties (PHP 8.2+) to ensure value objects cannot be modified after creation.
 
 - **Optional validation**: `isValid()`  
   Developers decide when and how to validate the underlying value.
 
 - **Semantic comparison**: `equals(ValueObjectInterface $other)`  
-  Compare two value objects of the same type and value.
+  Deep comparison using serialization, ensuring value equality.
 
 - **Consistent value access**: `value()`  
   Returns the underlying primitive or structured value.
 
-- **String representation**: `__toString()`  
+- **Hash support**: `hashCode()`  
+  Deterministic hash for use as array keys or in collections.
+
+- **Universal serialization**: `toArray()`  
+  Returns array representation, works with JSON, XML, and other formats.
+
+- **Change detection**: `diff(ValueObjectInterface $other)`  
+  Shows what changed between two value objects.
+
+- **String representation**: `toString()` and `__toString()`  
   Ensures every value object can be safely cast to a string.
 
 - **Minimalistic and extensible**  
-  The interface stays small and expressive, while concrete classes define their own semantics.
+  The interface stays small and expressive, while concrete classes define their own semantics and factories.
 
 ---
 
@@ -40,7 +50,7 @@ composer require stougeiro/valueobject
 ```
 
 
-## 🚀 Usage Example
+## 🚀 Usage
 
 ### Creating a Value Object
 
@@ -49,9 +59,20 @@ use STDW\ValueObject\ValueObjectAbstracted;
 
 final class Email extends ValueObjectAbstracted
 {
-    public function __construct(private string $email) {}
+    private function __construct(private readonly string $email) {}
 
-    public function value(): mixed
+    public static function fromString(string $email): static
+    {
+        $instance = new self(strtolower(trim($email)));
+
+        if ( ! $instance->isValid()) {
+            throw new \InvalidArgumentException("Invalid email: {$email}");
+        }
+
+        return $instance;
+    }
+
+    public function value(): string
     {
         return $this->email;
     }
@@ -61,22 +82,58 @@ final class Email extends ValueObjectAbstracted
         return filter_var($this->email, FILTER_VALIDATE_EMAIL) !== false;
     }
 
-    public function __toString(): string
+    public function user(): string
+    {
+        return explode('@', $this->email)[0];
+    }
+
+    public function domain(): string
+    {
+        return explode('@', $this->email)[1];
+    }
+
+    public function toString(): string
     {
         return $this->email;
     }
-}
-```
 
-
-## 🚀 Instantiation
-
-```php
-    $email = Email::create('sidney@example.com');
-
-    if ($email->isValid()) {
-        echo $email; // sidney@example.com
+    /** @return array<string, mixed> */
+    public function toArray(): array
+    {
+        return [
+            'email' => $this->email,
+            'user' => $this->user(),
+            'domain' => $this->domain(),
+        ];
     }
+}
+
+$email = Email::fromString('User@Example.com');
+
+// Value and string
+$email->value();           // "user@example.com"
+$email->toString();        // "user@example.com"
+(string) $email;           // "user@example.com"
+
+// Comparison and hash
+$email2 = Email::fromString('user@example.com');
+$email->equals($email2);   // true
+$email->hashCode();        // "b4c1d7e5a0f2b3c4d5e6f7a8b9c0d1e2f3a4b5c6"
+
+// Serialization
+$email->toArray();         // ['email' => 'user@example.com', 'user' => 'user', 'domain' => 'example.com']
+json_encode($email->toArray());  // '{"email":"user@example.com","user":"user","domain":"example.com"}'
+
+// Change detection (granular via toArray)
+$email3 = Email::fromString('new@domain.com');
+$email->diff($email3);     // ['email' => 'new@domain.com', 'user' => 'new', 'domain' => 'domain.com']
+
+// Functional accessors
+$email->user();            // "user"
+$email->domain();          // "example.com"
+
+// Collections
+$emails = [$email->hashCode() => $email];
 ```
 
 ---

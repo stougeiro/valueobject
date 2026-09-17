@@ -3,35 +3,62 @@
     namespace STDW\ValueObject;
 
 
-    abstract class ValueObjectAbstracted implements ValueObjectInterface
+    readonly abstract class ValueObjectAbstracted implements ValueObjectInterface
     {
-        /**
-         * @return ValueObjectInterface
+        /** @return mixed 
          */
-        abstract public static function create(mixed ...$args): ValueObjectInterface;
+        public abstract function value(): mixed;
+
+        /** @return string 
+         */
+        public function hashCode(): string
+        {
+            return sha1(serialize($this->value()));
+        }
+
+        /** @return bool 
+         */
+        public abstract function isValid(): bool;
+
+        /** @return string 
+         */
+        public abstract function toString(): string;
+
+        /** @return array<string, mixed>
+         */
+        public abstract function toArray(): array;
 
         /**
-         * @return mixed
-         */
-        abstract public function value(): mixed;
-
-        /**
-         * @param ValueObjectInterface $other
-         * @return bool
+         * @param ValueObjectInterface $other 
+         * @return bool 
          */
         public function equals(ValueObjectInterface $other): bool
         {
             return $other instanceof static
-                && $other->value() === $this->value();
+                && serialize($this->value()) === serialize($other->value());
         }
 
-        /**
-         * @return bool
-         */
-        abstract public function isValid(): bool;
+        /** @return array<string, mixed>
+        */
+        public function diff(ValueObjectInterface $other): array
+        {
+            $current = $this->toArray();
+            $compare = $other->toArray();
+            $changes = [];
 
-        /**
-         * @return string
+            foreach ($compare as $key => $value) {
+                if ( ! isset($current[$key]) || $current[$key] !== $value) {
+                    $changes[$key] = $value;
+                }
+            }
+
+            return $changes;
+        }
+
+        /** @return string 
          */
-        abstract public function __toString(): string;
+        public function __toString(): string
+        {
+            return $this->toString();
+        }
     }
