@@ -38,8 +38,10 @@
                 && serialize($this->value()) === serialize($other->value());
         }
 
-        /** @return array<string, mixed>
-        */
+        /**
+         * @param ValueObjectInterface $other 
+         * @return array<string, mixed> 
+         */
         public function diff(ValueObjectInterface $other): array
         {
             $current = $this->toArray();

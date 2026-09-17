@@ -33,8 +33,10 @@
          */
         public function equals(ValueObjectInterface $other): bool;
 
-        /** @return array<string, mixed>
-        */
+        /**
+         * @param ValueObjectInterface $other 
+         * @return array 
+         */
         public function diff(ValueObjectInterface $other): array;
 
         /** @return string 
