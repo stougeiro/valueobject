@@ -13,7 +13,7 @@
          */
         public function hashCode(): string
         {
-            return sha1(serialize($this->value()));
+            return $this->hash($this->toArray());
         }
 
         /** @return bool 
@@ -35,7 +35,7 @@
         public function equals(ValueObjectInterface $other): bool
         {
             return $other instanceof static
-                && serialize($this->value()) === serialize($other->value());
+                && $this->hash($this->toArray()) === $this->hash($other->toArray());
         }
 
         /**
@@ -62,5 +62,15 @@
         public function __toString(): string
         {
             return $this->toString();
+        }
+
+
+        /**
+         * @param array<string, mixed> $value 
+         * @return string 
+         */
+        protected function hash(array $value): string
+        {
+            return sha1(serialize($value));
         }
     }

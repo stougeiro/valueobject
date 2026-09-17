@@ -35,7 +35,7 @@
 
         /**
          * @param ValueObjectInterface $other 
-         * @return array 
+         * @return array<string, mixed> 
          */
         public function diff(ValueObjectInterface $other): array;
 

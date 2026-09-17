@@ -124,18 +124,18 @@ it('email is trimmed', function () {
     expect($email->value())->toBe('user@example.com');
 });
 
-it('invalid email throws exception', function () {
-    makeEmail('invalid-email');
-})->throws(\InvalidArgumentException::class);
+it('rejects invalid emails', function (string $email) {
+    makeEmail($email);
+})->throws(\InvalidArgumentException::class)->with([
+    '',
+    'invalid-email',
+    'user@',
+    '@example.com',
+]);
 
-it('empty email throws exception', function () {
-    makeEmail('');
-})->throws(\InvalidArgumentException::class);
+it('hashCode works with non-serializable value', function () {
+    $vo = \Tests\Fixtures\NonSerializableVO::fromCallable(fn() => 'test');
 
-it('email without domain throws exception', function () {
-    makeEmail('user@');
-})->throws(\InvalidArgumentException::class);
-
-it('email without user throws exception', function () {
-    makeEmail('@example.com');
-})->throws(\InvalidArgumentException::class);
+    expect($vo->hashCode())->toHaveLength(40)
+        ->and($vo->hashCode())->toMatch('/^[a-f0-9]+$/');
+});

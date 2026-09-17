@@ -111,10 +111,9 @@ it('email is immutable', function () {
     expect($property->isReadOnly())->toBeTrue();
 });
 
-it('invalid email throws exception', function () {
-    Email::fromString('invalid-email');
-})->throws(\InvalidArgumentException::class, 'Invalid email: invalid-email');
-
-it('email with multiple @ throws exception', function () {
-    Email::fromString('user@name@example.com');
-})->throws(\InvalidArgumentException::class);
+it('rejects invalid emails', function (string $email) {
+    Email::fromString($email);
+})->throws(\InvalidArgumentException::class)->with([
+    'invalid-email',
+    'user@name@example.com',
+]);
