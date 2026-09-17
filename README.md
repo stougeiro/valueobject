@@ -41,6 +41,30 @@ This package provides a minimalistic interface and an extensible abstract class 
 
 ---
 
+## 🔍 How Comparisons Work
+
+Both `equals()` and `diff()` compare value objects using their `toArray()` representation.
+
+This approach ensures:
+- **Full structural equality**: Not just raw value, but the complete semantic representation
+- **Type safety**: `equals()` requires same class via `instanceof static`
+- **Consistent behavior**: Hash, JSON, XML, and comparisons all use the same array structure
+
+```php
+$email1 = Email::fromString('user@example.com');
+$email2 = Email::fromString('USER@EXAMPLE.COM');
+
+// Both normalize to the same toArray() representation
+$email1->toArray(); // ['email' => 'user@example.com', 'user' => 'user', 'domain' => 'example.com']
+$email2->toArray(); // ['email' => 'user@example.com', 'user' => 'user', 'domain' => 'example.com']
+
+$email1->equals($email2); // true
+```
+
+The `hashCode()` method also uses `toArray()`, ensuring consistency when value objects are used as array keys or in collections.
+
+---
+
 ## 📦 Installation
 
 Install via Composer:
@@ -52,7 +76,7 @@ composer require stougeiro/valueobject
 
 ## 🚀 Usage
 
-### Creating a Value Object
+### Defining a Value Object
 
 ```php
 use STDW\ValueObject\ValueObjectAbstracted;
@@ -107,33 +131,67 @@ final class Email extends ValueObjectAbstracted
         ];
     }
 }
+```
 
+### Creating Instances
+
+Named constructors are defined by you, with full type safety:
+
+```php
 $email = Email::fromString('User@Example.com');
 
-// Value and string
-$email->value();           // "user@example.com"
-$email->toString();        // "user@example.com"
-(string) $email;           // "user@example.com"
+$email->value();              // "user@example.com"
+$email->toString();           // "user@example.com"
+(string) $email;              // "user@example.com"
+```
 
-// Comparison and hash
-$email2 = Email::fromString('user@example.com');
-$email->equals($email2);   // true
-$email->hashCode();        // "b4c1d7e5a0f2b3c4d5e6f7a8b9c0d1e2f3a4b5c6"
+### Comparison
 
-// Serialization
-$email->toArray();         // ['email' => 'user@example.com', 'user' => 'user', 'domain' => 'example.com']
-json_encode($email->toArray());  // '{"email":"user@example.com","user":"user","domain":"example.com"}'
+```php
+$other = Email::fromString('user@example.com');
 
-// Change detection (granular via toArray)
-$email3 = Email::fromString('new@domain.com');
-$email->diff($email3);     // ['email' => 'new@domain.com', 'user' => 'new', 'domain' => 'domain.com']
+$email->equals($other);       // true (same structure)
+$email->equals($other);       // true (normalization applied)
+```
 
-// Functional accessors
-$email->user();            // "user"
-$email->domain();          // "example.com"
+### Serialization
 
-// Collections
+```php
+// Array
+$email->toArray();
+// ['email' => 'user@example.com', 'user' => 'user', 'domain' => 'example.com']
+
+// JSON
+json_encode($email->toArray());
+// '{"email":"user@example.com","user":"user","domain":"example.com"}'
+
+// As array key
 $emails = [$email->hashCode() => $email];
+```
+
+### Change Detection
+
+```php
+$current = Email::fromString('user@example.com');
+$updated = Email::fromString('new@domain.com');
+
+$current->diff($updated);
+// ['email' => 'new@domain.com', 'user' => 'new', 'domain' => 'domain.com']
+
+// Empty when no changes
+$current->diff(Email::fromString('user@example.com'));
+// []
+```
+
+### Domain-Specific Accessors
+
+Define your own semantic methods:
+
+```php
+$email = Email::fromString('user@example.com');
+
+$email->user();               // "user"
+$email->domain();             // "example.com"
 ```
 
 ---
@@ -143,30 +201,6 @@ $emails = [$email->hashCode() => $email];
 Value Objects are a core building block in domain‑driven design and clean architecture. They encapsulate meaning, enforce structure, and prevent primitive obsession — ensuring that values carry behavior and validation instead of floating loosely through the system.
 
 This package aims to provide a simple, expressive and unobtrusive foundation for building your own Value Objects without unnecessary boilerplate.
-
----
-
-## 🔍 How Comparisons Work
-
-Both `equals()` and `diff()` compare value objects using their `toArray()` representation.
-
-This approach ensures:
-- **Full structural equality**: Not just raw value, but the complete semantic representation
-- **Type safety**: `equals()` requires same class via `instanceof static`
-- **Consistent behavior**: Hash, JSON, XML, and comparisons all use the same array structure
-
-```php
-$email1 = Email::fromString('user@example.com');
-$email2 = Email::fromString('USER@EXAMPLE.COM');
-
-// Both normalize to the same toArray() representation
-$email1->toArray(); // ['email' => 'user@example.com', 'user' => 'user', 'domain' => 'example.com']
-$email2->toArray(); // ['email' => 'user@example.com', 'user' => 'user', 'domain' => 'example.com']
-
-$email1->equals($email2); // true
-```
-
-The `hashCode()` method also uses `toArray()`, ensuring consistency when value objects are used as array keys or in collections.
 
 ---
 
